@@ -153,12 +153,4 @@ public class GeneralService {
         }
 
     }
-
-
-
-    public static void main(String[] args) {
-
-        GeneralService service = new GeneralService();
-        service.startCLI();
-    }
 }

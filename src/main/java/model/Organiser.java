@@ -21,6 +21,6 @@ public class Organiser extends User {
         if (event != null && event.getLoclDate().isAfter(LocalDate.now()))
             organizedEvents.add(event);
         else
-            System.out.println("Evenimentul nu exista sau se desfasoara in trecut!");
+            System.out.println("Event does not exist or is in the past!");
     }
 }

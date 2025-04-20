@@ -23,8 +23,8 @@ public class Event {
     private int capacity;
     private int availableTickets;
 
-    private static final Set<String> ALLOWED_TYPES = Set.of("Concert", "Festival", "Expozitie", "Teatru", "Sport", "Standup",
-            "Conferinta", "Petrecere");
+    private static final Set<String> ALLOWED_TYPES = Set.of("Concert", "Festival", "Exhibition", "Theater", "Sport", "Standup",
+            "Conference", "Party");
 
     // Constructor
     public Event(String name, Organiser organiser, String venue, String location, String[] artists, String stringDate,
@@ -131,10 +131,3 @@ public class Event {
 
 }
 
-//String dateTimeString = "2025-04-19 18:30";
-//DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyy HH:mm");
-//LocalDateTime parsedDateTime = LocalDateTime.parse(dateTimeString, formatter);
-//
-//LocalDateTime dateTime = LocalDateTime.now();
-//DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyy HH:mm");
-//String formattedDateTime = dateTime.format(formatter);

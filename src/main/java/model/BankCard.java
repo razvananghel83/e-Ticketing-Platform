@@ -26,29 +26,28 @@ public class BankCard {
 
     public void setNumber(String number) {
         if (!CARD_NUMBER_PATTERN.matcher(number).matches()) {
-            throw new IllegalArgumentException("Numărul cardului trebuie să aibă exact 16 cifre!");
+            throw new IllegalArgumentException("Card number must have exactly 16 digits!");
         }
         this.number = number;
     }
 
     public void setCvv(String cvv) {
         if (!CVV_PATTERN.matcher(cvv).matches()) {
-            throw new IllegalArgumentException("CVV-ul trebuie să aibă exact 3 cifre!");
+            throw new IllegalArgumentException("CVV must have exactly 3 digits!");
         }
         this.cvv = cvv;
     }
 
     public void setCardHolderName(String cardHolderName) {
         if (!CARD_HOLDER_PATTERN.matcher(cardHolderName).matches()) {
-            throw new IllegalArgumentException("Numele deținătorului cardului trebuie să aibă cel puțin două cuvinte care " +
-                    "să înceapă cu majuscule!");
+            throw new IllegalArgumentException("Cardholder name must have at least 2 words, each starting with a capital letter!");
         }
         this.cardHolderName = cardHolderName;
     }
 
     public void setExpiryDate(LocalDate expiryDate) {
         if (expiryDate == null || !expiryDate.isAfter(LocalDate.now())) {
-            throw new IllegalArgumentException("Data de expirare a cardului trebuie să fie ulterioară datei curente!");
+            throw new IllegalArgumentException("Card expiry date must be in the future!");
         }
         this.expiryDate = expiryDate;
     }
