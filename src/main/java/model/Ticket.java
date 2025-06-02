@@ -1,27 +1,60 @@
 package model;
 
-public class Ticket extends TicketType {
+import java.time.LocalDateTime;
 
-    private static int nextId = 1;
-    private final int id;
-    private Participant participant;
+public class Ticket {
 
-    public Ticket(Event event, Organiser organiser, String typeName, String description, int price, Participant participant) {
+    private int ticketId;
+    private int ticketTypeId;
+    private int paymentId;
+    private int participantId;
+    private LocalDateTime createdAt;
 
-        super(event, organiser, typeName, description, price);
-        this.id = ++nextId;
-        this.participant = participant;
+    public Ticket(LocalDateTime createdAt, int participantId, int paymentId, int ticketTypeId) {
+
+        this.createdAt = createdAt;
+        this.participantId = participantId;
+        this.paymentId = paymentId;
+        this.ticketTypeId = ticketTypeId;
     }
 
-    public int getId() {
-        return id;
+    public int getTicketTypeId() {
+        return ticketTypeId;
     }
 
-    public Participant getParticipant() {
-        return participant;
+    public void setTicketTypeId(int ticketTypeId) {
+        this.ticketTypeId = ticketTypeId;
     }
 
-    public void setParticipant(Participant participant) {
-        this.participant = participant;
+    public int getPaymentId() {
+        return paymentId;
+    }
+
+    public void setPaymentId(int paymentId) {
+        this.paymentId = paymentId;
+    }
+
+    public int getParticipantId() {
+        return participantId;
+    }
+
+    public void setParticipantId(int participantId) {
+        this.participantId = participantId;
+    }
+
+    public LocalDateTime getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(LocalDateTime createdAt) {
+        this.createdAt = createdAt;
+    }
+
+    public int getTicketId() {
+        return ticketId;
+    }
+
+    public void setTicketId(int ticketId) {
+        this.ticketId = ticketId;
     }
 }

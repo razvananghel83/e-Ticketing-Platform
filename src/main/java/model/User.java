@@ -1,24 +1,26 @@
 package model;
 
-public abstract class User {
+public class User {
+    private int userId;
+    private String username;
+    private String email;
+    private String password;
+    private String userType; // "PARTICIPANT" or "ORGANISER"
 
-    protected static int nextId;
-    protected final int id;
-    protected String username;
-    protected String email;
-    protected String password;
+    public User(String username, String email, String password, String userType) {
 
-
-    protected User(String username, String email, String password) {
-
-        this.id = nextId++;
         this.username = username;
         this.email = email;
         this.password = password;
+        this.userType = userType;
     }
 
-    public int getId() {
-        return id;
+    public int getUserId() {
+        return userId;
+    }
+
+    public void setUserId(int userId) {
+        this.userId = userId;
     }
 
     public String getUsername() {
@@ -44,4 +46,13 @@ public abstract class User {
     public void setPassword(String password) {
         this.password = password;
     }
+
+    public String getUserType() {
+        return userType;
+    }
+
+    public void setUserType(String userType) {
+        this.userType = userType;
+    }
+
 }

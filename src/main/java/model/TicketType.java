@@ -1,32 +1,54 @@
 package model;
 
-public abstract class TicketType {
+import java.math.BigDecimal;
 
-    protected final Event event;
-    protected final Organiser organiser;
-    protected final String typeName;
-    protected String description;
-    protected int price;
+public class TicketType {
+    private int ticketTypeId;
+    private int eventId;
+    private String name;
+    private String description;
+    private BigDecimal price;
+    private int maxQuantity;
 
-    protected TicketType(Event event, Organiser organiser, String typeName, String description, int price) {
+    public TicketType(int maxQuantity, BigDecimal price, String description, String name, int eventId) {
 
-        this.event = event;
-        this.organiser = organiser;
-        this.typeName = typeName;
-        this.description = description;
+        this.maxQuantity = maxQuantity;
         this.price = price;
+        this.description = description;
+        this.name = name;
+        this.eventId = eventId;
     }
 
-    public Event getEvent() {
-        return event;
+    public int getTicketTypeId() {
+        return ticketTypeId;
     }
 
-    public Organiser getOrganiser() {
-        return organiser;
+    public void setTicketTypeId(int ticketTypeId) {
+        this.ticketTypeId = ticketTypeId;
     }
 
-    public String getTypeName() {
-        return typeName;
+    public int getEventId() {
+        return eventId;
+    }
+
+    public void setEventId(int eventId) {
+        this.eventId = eventId;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public BigDecimal getPrice() {
+        return price;
+    }
+
+    public void setPrice(BigDecimal price) {
+        this.price = price;
     }
 
     public String getDescription() {
@@ -37,11 +59,11 @@ public abstract class TicketType {
         this.description = description;
     }
 
-    public int getPrice() {
-        return price;
+    public int getMaxQuantity() {
+        return maxQuantity;
     }
 
-    public void setPrice(int price) {
-        this.price = price;
+    public void setMaxQuantity(int maxQuantity) {
+        this.maxQuantity = maxQuantity;
     }
 }

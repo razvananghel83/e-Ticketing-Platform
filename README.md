@@ -13,14 +13,15 @@ First stage requirements:
 6) TicketType
 7) BankCard
 8) Payment
+9) Location
 
-- List of 10 actions / querries:
+- List of 10 actions / queries:
 1) Create/register a user
 2) Users can log in and out of the application
 3) Edit user details
 4) Organisers can create events 
 5) Organisers can edit an event's details
-6) A participand can buy a ticket to an event
+6) A participant can buy a ticket to an event
 7) Return a ticket to an event
 8) Sell the ticket to another user
 9) All events can be shown, ordered by date

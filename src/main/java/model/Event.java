@@ -1,45 +1,55 @@
 package model;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.Set;
-import java.util.TreeSet;
+import java.util.List;
 
 public class Event {
 
+    private int eventId;
+    private int locationId;
+    private int userId; // References Organiser
     private String name;
-    private Organiser organiser;
-    private String venue;
-    private String location;
-    private TreeSet<String> artists;
-    private LocalDate date;
-
-    private String type;
+    private LocalDateTime date;
+    private String artists;
+    private String eventType;
     private String description;
+    private List<TicketType> ticketTypes;
 
-    private int capacity;
-    private int availableTickets;
+    public Event(int locationId, int userId, String name, LocalDateTime date, String artists,
+                 String eventType, String description, List<TicketType> ticketTypes) {
 
-    private static final Set<String> ALLOWED_TYPES = Set.of("Concert", "Festival", "Exhibition", "Theater", "Sport", "Standup",
-            "Conference", "Party");
-
-    // Constructor
-    public Event(String name, Organiser organiser, String venue, String location, String[] artists, String stringDate,
-                 String type, String description, int capacity ){
-
+        this.locationId = locationId;
+        this.userId = userId;
         this.name = name;
-        this.organiser = organiser;
-        this.venue = venue;
-        this.location = location;
-        this.artists = new TreeSet<>(Arrays.asList(artists));
-        this.date = LocalDate.parse(stringDate, DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm"));
-        if (ALLOWED_TYPES.contains(type)) this.type = type;
+        this.date = date;
+        this.artists = artists;
+        this.eventType = eventType;
         this.description = description;
-        this.capacity = capacity;
-        this.availableTickets = capacity;
+        this.ticketTypes = ticketTypes;
+    }
+
+    public int getLocationId() {
+        return locationId;
+    }
+
+    public void setLocationId(int locationId) {
+        this.locationId = locationId;
+    }
+
+    public int getEventId() {
+        return eventId;
+    }
+
+    public void setEventId(int eventId) {
+        this.eventId = eventId;
+    }
+
+    public int getUserId() {
+        return userId;
+    }
+
+    public void setUserId(int userId) {
+        this.userId = userId;
     }
 
     public String getName() {
@@ -50,42 +60,20 @@ public class Event {
         this.name = name;
     }
 
-    public Organiser getOrganiser() {
-        return organiser;
-    }
-
-    public String getVenue() {
-        return venue;
-    }
-
-    public void setVenue(String venue) {
-        this.venue = venue;
-    }
-
-    public String getLocation() {
-        return location;
-    }
-
-    public void setLocation(String location) {
-        this.location = location;
-    }
-
-    public String[] getArtists() {
-        return artists.toArray(new String[artists.size()]);
-    }
-
-    public LocalDate getLoclDate() {
+    public LocalDateTime getDate() {
         return date;
     }
 
-    public void setDate(String stringDate) {
-
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyy HH:mm");
-        this.date = LocalDate.from(LocalDateTime.parse(stringDate, formatter));
+    public void setDate(LocalDateTime date) {
+        this.date = date;
     }
 
-    public String getType() {
-        return type;
+    public String getArtists() {
+        return artists;
+    }
+
+    public void setArtists(String artists) {
+        this.artists = artists;
     }
 
     public String getDescription() {
@@ -96,38 +84,20 @@ public class Event {
         this.description = description;
     }
 
-    public int getCapacity() {
-        return capacity;
+    public String getEventType() {
+        return eventType;
     }
 
-    public int getAvailableTickets() {
-        return availableTickets;
+    public void setEventType(String eventType) {
+        this.eventType = eventType;
     }
 
-    // Methods
-    public void increaseAvailableTickets(int amount) {
-        this.availableTickets += amount;
+    public List<TicketType> getTicketTypes() {
+        return ticketTypes;
     }
 
-    public void increaseCapacity(int amount) {
-        this.capacity += amount;
-    }
-
-    public void addArtists(String[] newArtists){
-        Collections.addAll(this.artists, newArtists);
-    }
-
-    public void removeArtists(String[] artistsToRemove){
-
-        for(String artist : artistsToRemove)
-            this.artists.remove(artist);
-    }
-
-    public String getDate() {
-
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyy HH:mm");
-        return this.date.format(formatter);
+    public void setTicketTypes(List<TicketType> ticketTypes) {
+        this.ticketTypes = ticketTypes;
     }
 
 }
-

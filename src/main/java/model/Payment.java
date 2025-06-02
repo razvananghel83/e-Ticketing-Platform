@@ -1,42 +1,51 @@
 package model;
 
-import java.util.ArrayList;
+import java.math.BigDecimal;
+import java.time.LocalDateTime;
 
 public class Payment {
 
-    private BankCard card;
-    private ArrayList<TicketType> tickets;
-    private int amount;
+    private int paymentId;
+    private String cardNumber; // References BankCard
+    private BigDecimal amount;
+    private LocalDateTime paymentDate;
 
-    public Payment(BankCard card, ArrayList<TicketType> tickets) {
+    public Payment(LocalDateTime paymentDate, BigDecimal amount, String cardNumber) {
 
-        this.card = card;
-        this.tickets = tickets;
-        this.amount = tickets.stream().mapToInt(TicketType::getPrice).sum();
+        this.paymentDate = paymentDate;
+        this.amount = amount;
+        this.cardNumber = cardNumber;
     }
 
-    public void setCard(BankCard card) {
-        this.card = card;
+    public String getCardNumber() {
+        return cardNumber;
     }
 
-    public BankCard getCard() {
-        return card;
+    public void setCardNumber(String cardNumber) {
+        this.cardNumber = cardNumber;
     }
 
-    public ArrayList<TicketType> getTickets() {
-        return tickets;
+    public LocalDateTime getPaymentDate() {
+        return paymentDate;
     }
 
-    public int getAmount() {
+    public void setPaymentDate(LocalDateTime paymentDate) {
+        this.paymentDate = paymentDate;
+    }
+
+    public BigDecimal getAmount() {
         return amount;
     }
 
-    public void removeTicket(TicketType ticket){
-
-        if (this.tickets.contains(ticket)) {
-            tickets.remove(ticket);
-            this.amount = tickets.stream().mapToInt(TicketType::getPrice).sum();
-        }
+    public void setAmount(BigDecimal amount) {
+        this.amount = amount;
     }
 
+    public int getPaymentId() {
+        return paymentId;
+    }
+
+    public void setPaymentId(int paymentId) {
+        this.paymentId = paymentId;
+    }
 }

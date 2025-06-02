@@ -1,26 +1,22 @@
 package model;
 
-import java.time.LocalDate;
-import java.util.ArrayList;
+import java.util.List;
 
 public class Organiser extends User {
 
-    private ArrayList<Event> organizedEvents;
+    private List<Event> organizedEvents;
 
-    public Organiser(String username, String email, String password) {
+    public Organiser(String username, String email, String password, String userType, List<Event> organizedEvents) {
 
-        super(username, email, password);
-        this.organizedEvents = new ArrayList<>();
+        super(username, email, password, userType);
+        this.organizedEvents = organizedEvents;
     }
 
-    public ArrayList<Event> getOrganizedEvents() {
+    public List<Event> getOrganizedEvents() {
         return organizedEvents;
     }
 
-    public void organizeEvent(Event event) {
-        if (event != null && event.getLoclDate().isAfter(LocalDate.now()))
-            organizedEvents.add(event);
-        else
-            System.out.println("Event does not exist or is in the past!");
+    public void setOrganizedEvents(List<Event> organizedEvents) {
+        this.organizedEvents = organizedEvents;
     }
 }

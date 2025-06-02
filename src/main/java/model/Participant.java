@@ -1,26 +1,21 @@
 package model;
 
-import java.util.ArrayList;
+import java.util.List;
 
 public class Participant extends User {
 
-    private ArrayList<Ticket> bookedTickets;
+    private List<BankCard> bankCards;
 
-    public Participant(String username, String email, String password) {
-
-        super(username, email, password);
-        this.bookedTickets = new ArrayList<>();
+    public Participant(String username, String email, String password, String userType, List<BankCard> bankCards) {
+        super(username, email, password, userType);
+        this.bankCards = bankCards;
     }
 
-    public void bookTicket(Ticket ticket) {
-        if (ticket != null)
-            bookedTickets.add(ticket);
-        else
-            System.out.println("Biletul nu exista!");
-
+    public List<BankCard> getBankCards() {
+        return bankCards;
     }
 
-    public ArrayList<Ticket> getBookedTickets() {
-        return bookedTickets;
+    public void setBankCards(List<BankCard> bankCards) {
+        this.bankCards = bankCards;
     }
 }
