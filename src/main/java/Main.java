@@ -1,7 +1,7 @@
 import cli.AuthCLI;
-import persistance.EventRepository;
-import persistance.LocationRepository;
-import persistance.UserRepository;
+import persistence.EventRepository;
+import persistence.LocationRepository;
+import persistence.UserRepository;
 import service.EventService;
 import service.UserService;
 

@@ -1,7 +1,7 @@
-package persistance;
+package persistence;
 
 import model.Payment;
-import persistance.util.DatabaseConnectionUtil;
+import persistence.util.DatabaseConnectionUtil;
 
 import java.sql.*;
 import java.util.*;

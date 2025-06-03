@@ -1,7 +1,7 @@
 package service;
 
 import model.User;
-import persistance.UserRepository;
+import persistence.UserRepository;
 import exceptions.AuthenticationException;
 import exceptions.DuplicateUserException;
 
@@ -10,7 +10,7 @@ import java.util.Optional;
 public class UserService {
 
     private final UserRepository userRepository;
-    private User currentUser; // Tracks logged-in user
+    private User currentUser;
 
     public UserService(UserRepository userRepository) {
         this.userRepository = userRepository;
@@ -22,7 +22,6 @@ public class UserService {
     public User register(String username, String email, String password, String userType)
             throws DuplicateUserException {
 
-        // Validate username/email uniqueness
         if (userRepository.findByUsername(username).isPresent()) {
             throw new DuplicateUserException("Username already exists");
         }
@@ -31,7 +30,6 @@ public class UserService {
             throw new DuplicateUserException("Email already registered");
         }
 
-        // Create and save user
         User newUser = new User(username, email, password, userType);
         return userRepository.save(newUser);
     }
@@ -71,25 +69,18 @@ public class UserService {
             throw new IllegalStateException("No user is logged in");
         }
 
-        // Validate new username/email uniqueness
-        if (!newUsername.equals(currentUser.getUsername())){
-            userRepository.findByUsername(newUsername).ifPresent(u -> {
-                try {
-                    throw new DuplicateUserException("Username already taken");
-                } catch (DuplicateUserException e) {
-                    throw new RuntimeException(e);
-                }
-            });
+        if (!newUsername.equals(currentUser.getUsername())) {
+            Optional<User> existingWithUsername = userRepository.findByUsername(newUsername);
+            if (existingWithUsername.isPresent()) {
+                throw new DuplicateUserException("Username already taken");
+            }
         }
 
         if (!newEmail.equals(currentUser.getEmail())) {
-            userRepository.findByEmail(newEmail).ifPresent(u -> {
-                try {
-                    throw new DuplicateUserException("Email already registered");
-                } catch (DuplicateUserException e) {
-                    throw new RuntimeException(e);
-                }
-            });
+            Optional<User> existingWithEmail = userRepository.findByEmail(newEmail);
+            if (existingWithEmail.isPresent()) {
+                throw new DuplicateUserException("Email already registered");
+            }
         }
 
         if (!newPassword.isEmpty()) {

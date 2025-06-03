@@ -1,11 +1,9 @@
 package service;
 
 import model.Event;
-import model.Location;
-import model.TicketType;
 import model.User;
-import persistance.EventRepository;
-import persistance.LocationRepository;
+import persistence.EventRepository;
+import persistence.LocationRepository;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -33,7 +31,7 @@ public class EventService {
             throw new IllegalArgumentException("Only organizers can create events");
         }
         
-        locationRepository.findById(String.valueOf(locationId))
+                    locationRepository.findById(String.valueOf(locationId))
             .orElseThrow(() -> new IllegalArgumentException("Invalid location"));
             
         LocalDateTime eventDateTime;
@@ -73,14 +71,14 @@ public class EventService {
             throw new IllegalArgumentException("Only organizers can edit events");
         }
         
-        Event event = eventRepository.findById(String.valueOf(eventId))
+                    Event event = eventRepository.findById(String.valueOf(eventId))
             .orElseThrow(() -> new IllegalArgumentException("Event not found"));
             
         if (event.getUserId() != organizer.getUserId()) {
             throw new IllegalArgumentException("You can only edit your own events");
         }
         
-        locationRepository.findById(String.valueOf(locationId))
+                    locationRepository.findById(String.valueOf(locationId))
             .orElseThrow(() -> new IllegalArgumentException("Invalid location"));
             
         if (dateTimeStr != null && !dateTimeStr.isEmpty()) {
