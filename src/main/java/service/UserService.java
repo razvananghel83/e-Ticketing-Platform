@@ -1,26 +1,31 @@
 package service;
 
+import model.Organiser;
+import model.Participant;
 import model.User;
+import persistence.OrganiserRepository;
+import persistence.ParticipantRepository;
 import persistence.UserRepository;
 import exceptions.AuthenticationException;
 import exceptions.DuplicateUserException;
 
+import java.util.ArrayList;
 import java.util.Optional;
 
 public class UserService {
 
-    private final UserRepository userRepository;
+    private final UserRepository userRepository = UserRepository.getInstance();
+    private final OrganiserRepository organiserRepository = OrganiserRepository.getInstance();
+    private final ParticipantRepository participantRepository = ParticipantRepository.getInstance();
     private User currentUser;
 
-    public UserService(UserRepository userRepository) {
-        this.userRepository = userRepository;
+    public UserService() {
     }
 
     /**
-     * Registers a new user
+     * Registers a new user and inserts into the correct table based on user type
      */
-    public User register(String username, String email, String password, String userType)
-            throws DuplicateUserException {
+    public User register(String username, String email, String password, String userType) throws DuplicateUserException {
 
         if (userRepository.findByUsername(username).isPresent()) {
             throw new DuplicateUserException("Username already exists");
@@ -31,7 +36,27 @@ public class UserService {
         }
 
         User newUser = new User(username, email, password, userType);
-        return userRepository.save(newUser);
+        newUser = userRepository.save(newUser);
+
+        if ("ORGANISER".equalsIgnoreCase(userType)) {
+
+            Organiser organiser = new Organiser(newUser.getUsername(), newUser.getEmail(),
+                newUser.getPassword(), newUser.getUserType(), new ArrayList<>());
+            organiser.setUserId(newUser.getUserId());
+            organiserRepository.save(organiser);
+
+        } else if ("PARTICIPANT".equalsIgnoreCase(userType)) {
+
+            Participant participant = new Participant(newUser.getUsername(), newUser.getEmail(),
+                newUser.getPassword(), newUser.getUserType(), new ArrayList<>());
+            participant.setUserId(newUser.getUserId());
+            participantRepository.save(participant);
+
+        } else {
+            throw new IllegalArgumentException("Invalid user type, must be either ORGANISER or PARTICIPANT");
+        }
+
+        return newUser;
     }
 
     /**
@@ -61,22 +86,30 @@ public class UserService {
 
     /**
      * Updates user details
+     * If empty strings are provided for username or email, the current values are kept
      */
     public User updateUser(String newUsername, String newEmail, String newPassword)
             throws DuplicateUserException {
 
         if (currentUser == null) {
-            throw new IllegalStateException("No user is logged in");
+            throw new IllegalStateException("You are not logged in");
         }
 
-        if (!newUsername.equals(currentUser.getUsername())) {
+        if (newUsername.isEmpty()) {
+            newUsername = currentUser.getUsername();
+        } else if (!newUsername.equals(currentUser.getUsername())) {
+
             Optional<User> existingWithUsername = userRepository.findByUsername(newUsername);
             if (existingWithUsername.isPresent()) {
                 throw new DuplicateUserException("Username already taken");
             }
         }
 
-        if (!newEmail.equals(currentUser.getEmail())) {
+        if (newEmail.isEmpty()) {
+            newEmail = currentUser.getEmail();
+
+        } else if (!newEmail.equals(currentUser.getEmail())) {
+
             Optional<User> existingWithEmail = userRepository.findByEmail(newEmail);
             if (existingWithEmail.isPresent()) {
                 throw new DuplicateUserException("Email already registered");

@@ -1,7 +1,7 @@
 import cli.AuthCLI;
 import persistence.EventRepository;
 import persistence.LocationRepository;
-import persistence.UserRepository;
+import service.BankCardService;
 import service.EventService;
 import service.UserService;
 
@@ -9,8 +9,9 @@ public class Main {
 
     public static void main(String[] args) {
 
-        UserService userService = new UserService(UserRepository.getInstance());
+        UserService userService = new UserService();
         EventService eventService = new EventService(EventRepository.getInstance(), LocationRepository.getInstance());
-        new AuthCLI(userService, eventService).showAuthMenu();
+        BankCardService bankCardService = new BankCardService();
+        new AuthCLI(userService, eventService, bankCardService).showAuthMenu();
     }
 }

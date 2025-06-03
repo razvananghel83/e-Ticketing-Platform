@@ -2,7 +2,9 @@ package cli;
 
 import model.Event;
 import model.User;
+import service.BankCardService;
 import service.EventService;
+import service.LocationService;
 import service.UserService;
 
 import java.time.format.DateTimeFormatter;
@@ -10,68 +12,99 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Scanner;
 
-public class UserMenu {
+public class UserCLI {
 
     private final UserService userService;
     private final EventService eventService;
+    private final BankCardService bankCardService;
+    private final LocationService locationService;
     private final Scanner scanner;
+    private final BankCardCLI bankCardCLI;
+    private final LocationCLI locationCLI;
 
-    public UserMenu(UserService userService, EventService eventService) {
+    public UserCLI(UserService userService, EventService eventService, BankCardService bankCardService) {
+
         this.userService = userService;
         this.eventService = eventService;
+        this.bankCardService = bankCardService;
+        this.locationService = new LocationService();
+        this.bankCardCLI = new BankCardCLI(bankCardService, userService);
+        this.locationCLI = new LocationCLI(locationService, userService);
         this.scanner = new Scanner(System.in);
     }
 
     public void showUserMenu() {
         Optional<User> currentUser = userService.getCurrentUser();
-        
+
         if (currentUser.isEmpty()) {
             System.out.println("Access denied. Please log in to access this menu.");
             return;
         }
 
         while (true) {
+            int optionCounter = 1;
+
             System.out.println("\nUser Menu:");
-            System.out.println("1. View Profile");
-            System.out.println("2. Edit Profile");
-            
-            if ("ORGANISER".equals(currentUser.get().getUserType())) {
-                System.out.println("3. Manage Events");
-                System.out.println("4. Create New Event");
+            System.out.println(optionCounter++ + ". View Profile");
+            System.out.println(optionCounter++ + ". Edit Profile");
+
+            boolean isOrganiser = "ORGANISER".equals(currentUser.get().getUserType());
+
+            if (isOrganiser) {
+                System.out.println(optionCounter++ + ". Manage Events");
+                System.out.println(optionCounter++ + ". Create New Event");
+                System.out.println(optionCounter++ + ". Manage Locations");
+            } else if ("PARTICIPANT".equals(currentUser.get().getUserType())) {
+                System.out.println(optionCounter++ + ". Manage Bank Cards");
             }
-            
-            System.out.println("5. Logout");
-            System.out.println("6. Back to Main Menu");
+
+            int logoutOption = optionCounter++;
+            int backOption = optionCounter;
+
+            System.out.println(logoutOption + ". Logout");
+            System.out.println(backOption + ". Back to Main Menu");
             System.out.print("Choose an option: ");
 
-            int choice = scanner.nextInt();
-            scanner.nextLine();
+            int choice;
+            try {
+                choice = Integer.parseInt(scanner.nextLine());
+            } catch (NumberFormatException e) {
+                System.out.println("Please enter a valid number.");
+                continue;
+            }
 
-            switch (choice) {
-                case 1 -> showProfile();
-                case 2 -> editProfile();
-                case 3 -> {
-                    if ("ORGANISER".equals(currentUser.get().getUserType())) {
-                        manageEvents();
-                    } else {
-                        System.out.println("Invalid option");
-                    }
+            boolean isParticipant = "PARTICIPANT".equals(currentUser.get().getUserType());
+
+            // Basic options (1: Profile, 2: Edit)
+            if (choice == 1) {
+                showProfile();
+            } else if (choice == 2) {
+                editProfile();
+            }
+            // User type specific options
+            else if (choice == 3) {
+                if (isOrganiser) {
+                    manageEvents();
+                } else if (isParticipant) {
+                    bankCardCLI.showBankCardMenu();
+                } else {
+                    System.out.println("Invalid option");
                 }
-                case 4 -> {
-                    if ("ORGANISER".equals(currentUser.get().getUserType())) {
-                        createEvent();
-                    } else {
-                        System.out.println("Invalid option");
-                    }
-                }
-                case 5 -> {
-                    logout();
-                    return;
-                }
-                case 6 -> {
-                    return;
-                }
-                default -> System.out.println("Invalid option");
+            } else if (choice == 4 && isOrganiser) {
+                createEvent();
+            } else if (choice == 5 && isOrganiser) {
+                locationCLI.showLocationMenu();
+            }
+            // Logout option - position depends on user type
+            else if ((isOrganiser && choice == 6) || (isParticipant && choice == 4)) {
+                logout();
+                return;
+            }
+            // Back to main menu option - position depends on user type
+            else if ((isOrganiser && choice == 7) || (isParticipant && choice == 5)) {
+                return;
+            } else {
+                System.out.println("Invalid option");
             }
         }
     }
@@ -118,7 +151,7 @@ public class UserMenu {
             int locationId = scanner.nextInt();
             scanner.nextLine();
 
-            System.out.println("Enter event date and time (yyyy-MM-dd HH:mm):");
+            System.out.println("Enter event date and time (MM-dd-yyyy HH:mm):");
             String dateTime = scanner.nextLine();
             
             System.out.println("Enter artists/performers:");
@@ -161,7 +194,7 @@ public class UserMenu {
             return;
         }
         
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm");
         
         while (true) {
             System.out.println("\n=== Your Events ===");

@@ -49,8 +49,6 @@ public class OrganiserRepository {
                     String password = rs.getString("password");
                     String userType = rs.getString("user_type");
 
-                    // Create Organiser with required parameters
-                    // Using empty ArrayList for organizedEvents
                     Organiser organiser = new Organiser(username, email, password, userType, new ArrayList<>());
                     organiser.setUserId(userId);
                     return Optional.of(organiser);

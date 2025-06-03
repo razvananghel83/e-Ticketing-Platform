@@ -55,6 +55,9 @@ public class LocationRepository implements GenericRepository<Location> {
     }
 
     public List<Location> findByName(String namePattern) {
+        // Clear the storage before search to ensure we only return matching locations
+        storage.clear();
+
         try (PreparedStatement stmt = connection.prepareStatement(FIND_BY_NAME_SQL)) {
             stmt.setString(1, "%" + namePattern + "%");
             ResultSet rs = stmt.executeQuery();
@@ -78,6 +81,9 @@ public class LocationRepository implements GenericRepository<Location> {
 
     @Override
     public List<Location> findAll() {
+        // Clear the storage before fetching all locations
+        storage.clear();
+
         try (PreparedStatement stmt = connection.prepareStatement(FIND_ALL_SQL);
              ResultSet rs = stmt.executeQuery()) {
             extractResultSet(rs);
@@ -90,6 +96,9 @@ public class LocationRepository implements GenericRepository<Location> {
     @Override
     public Optional<Location> findById(String id) {
         int locationId = Integer.parseInt(id);
+        // Clear the storage before fetching specific location
+        storage.clear();
+
         try (PreparedStatement stmt = connection.prepareStatement(FIND_BY_ID_SQL)) {
             stmt.setInt(1, locationId);
             ResultSet rs = stmt.executeQuery();

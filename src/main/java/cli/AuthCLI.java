@@ -1,5 +1,6 @@
 package cli;
 
+import service.BankCardService;
 import service.EventService;
 import service.UserService;
 import java.util.Scanner;
@@ -7,13 +8,16 @@ import java.util.Scanner;
 public class AuthCLI {
 
     private final UserService userService;
-    private final UserMenu userMenu;
+    private final UserCLI userMenu;
+    private final BankCardService bankCardService;
     private final Scanner scanner;
 
-        public AuthCLI(UserService userService, EventService eventService) {
+
+    public AuthCLI(UserService userService, EventService eventService, BankCardService bankCardService) {
 
         this.userService = userService;
-        this.userMenu = new UserMenu(userService, eventService);
+        this.bankCardService = bankCardService;
+        this.userMenu = new UserCLI(userService, eventService, bankCardService);
         this.scanner = new Scanner(System.in);
     }
 
@@ -26,7 +30,7 @@ public class AuthCLI {
             System.out.print("Choose an option: ");
 
             int choice = scanner.nextInt();
-            scanner.nextLine(); // Consume newline
+            scanner.nextLine();
 
             switch (choice) {
                 case 1 -> registerUser();

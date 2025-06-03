@@ -82,7 +82,7 @@ public class ParticipantRepository implements GenericRepository<Participant> {
     public void update(Participant participant) {
         try (PreparedStatement stmt = connection.prepareStatement(UPDATE_SQL)) {
             stmt.setInt(1, participant.getUserId());
-            stmt.setInt(2, participant.getUserId()); // Using same ID for both params as it's the identifier
+            stmt.setInt(2, participant.getUserId());
             stmt.executeUpdate();
         } catch (SQLException e) {
             throw new RuntimeException(e);
@@ -109,15 +109,14 @@ public class ParticipantRepository implements GenericRepository<Participant> {
     }
 
     private Participant createParticipantFromResultSet(ResultSet rs) throws SQLException {
+
         int userId = rs.getInt("user_id");
         String username = rs.getString("username");
         String email = rs.getString("email");
         String password = rs.getString("password");
         String userType = rs.getString("user_type");
 
-        // Create a participant with all required parameters
-        // Currently creating with empty bank cards list
-        Participant participant = new Participant(username, email, password, userType, new ArrayList<>());
+       Participant participant = new Participant(username, email, password, userType, new ArrayList<>());
         participant.setUserId(userId);
         return participant;
     }
